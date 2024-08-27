@@ -9,8 +9,8 @@ steps:
 - task: Gradle@3
   inputs:
     workingDirectory: 'android'
-    gradleWrapperFile: 'android/gradlew'  # Explicit path to gradlew
-    options: '-Xmx3072m'
+    gradleWrapperFile: 'android/gradlew.bat'
+    gradleOptions: '-Xmx3072m --debug'  # Add debugging options
     javaHomeOption: 'JDKVersion'
     jdkVersion: '1.8'
     jdkArchitecture: 'x64'
