@@ -4,16 +4,15 @@ trigger:
 pool:
   name: 'Default'
   vmImage: 'windows-latest'
-
 steps:
 - task: Gradle@3
   inputs:
     workingDirectory: 'android'
     gradleWrapperFile: 'android/gradlew.bat'
-    gradleOptions: '-Xmx3072m --debug'  # Add debugging options
-    javaHomeOption: 'JDKVersion'
-    jdkVersion: '1.8'
-    jdkArchitecture: 'x64'
+    gradleOptions: '-Xmx3072m --debug'
+    javaHomeOption: 'Path'
+    jdkVersionOption: '21'
+    jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'build'
