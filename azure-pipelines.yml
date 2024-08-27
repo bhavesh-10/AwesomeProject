@@ -14,11 +14,7 @@ stages:
     displayName: 'Build Android App'
     steps:
     - script: |
-        if [ ! -d "node_modules" ]; then
-          npm install
-        else
-          echo "node_modules already present. Skipping npm install."
-        fi
+        npm install
         npm run build
       displayName: 'Install NPM packages and build'
 
