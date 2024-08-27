@@ -1,9 +1,10 @@
 trigger:
   branches:
     include:
-      - main  # Or your default branch
+      - main
 
 pool:
+  name: 'Default'
   vmImage: 'windows-latest'
 
 steps:
