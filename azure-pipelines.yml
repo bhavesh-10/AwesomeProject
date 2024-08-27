@@ -14,7 +14,11 @@ stages:
     displayName: 'Build Android App'
     steps:
     - script: |
-        npm install
+        if [ ! -d "node_modules" ]; then
+          npm install
+        else
+          echo "node_modules already present. Skipping npm install."
+        fi
         npm run build
       displayName: 'Install NPM packages and build'
 
@@ -25,10 +29,10 @@ stages:
 
     - task: Gradle@3
       inputs:
-        gradleWrapperFile: 'android/gradlew'
+        gradleWrapperFile: 'C:/Users/Bhavesh yadav/Documents/Coding/vsts-agent-win-x64-3.242.1/_work/7/s/android/gradlew.bat'
         options: 'assembleRelease --stacktrace --debug'
         tasks: 'assembleRelease'
-        workingDirectory: 'android'
+        workingDirectory: 'C:/Users/Bhavesh yadav/Documents/Coding/vsts-agent-win-x64-3.242.1/_work/7/s/android'
       displayName: 'Build Android App with Gradle'
       continueOnError: false
 
