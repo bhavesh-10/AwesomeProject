@@ -4,14 +4,20 @@ trigger:
 pool:
   name: 'Default'
   vmImage: 'windows-latest'
+
 steps:
+- task: UseJavaVersion@1
+  inputs:
+    versionSpec: '21'
+    architecture: 'x64'
+
 - task: Gradle@3
   inputs:
     workingDirectory: 'android'
     gradleWrapperFile: 'android/gradlew.bat'
     gradleOptions: '-Xmx3072m --debug'
-    javaHomeOption: 'Path'
-    jdkVersionOption: '21'
+    javaHomeOption: 'JDKVersion'  # Automatically select a JDK version
+    jdkVersionOption: '21'         # Specify the JDK version
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
