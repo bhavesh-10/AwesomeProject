@@ -1,0 +1,59 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  name: 'Default'
+  vmImage: 'windows-latest'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build_Android
+    displayName: 'Build Android App'
+    steps:
+    - script: |
+        npm install
+        npm run build
+      displayName: 'Install NPM packages and build'
+
+    - script: |
+        choco install gradle
+      displayName: 'Install Gradle'
+      continueOnError: false
+
+    - task: Gradle@3
+      inputs:
+        gradleWrapperFile: 'android/gradlew'
+        options: 'assembleRelease --stacktrace --debug'
+        tasks: 'assembleRelease'
+        workingDirectory: 'android'
+      displayName: 'Build Android App with Gradle'
+      continueOnError: false
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'android/app/build/outputs/apk/release/'
+        ArtifactName: 'AndroidApp'
+        publishLocation: 'Container'
+      displayName: 'Publish Android APK Artifact'
+
+- stage: Deploy
+  dependsOn: Build
+  jobs:
+  - job: Publish_to_Azure_Artifacts
+    displayName: 'Publish APK to Azure Artifacts'
+    steps:
+    - task: CopyFiles@2
+      inputs:
+        contents: '**/*.apk'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'
+      displayName: 'Copy APK files to staging directory'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'AndroidAPK'
+        publishLocation: 'Container'
+      displayName: 'Publish APK to Azure Artifacts'
