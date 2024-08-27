@@ -6,10 +6,10 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
-- task: UseJavaVersion@1
+- task: JavaToolInstaller@0
   inputs:
     versionSpec: '21'
-    architecture: 'x64'
+    jdkArchitecture: 'x64'
 
 - task: Gradle@3
   inputs:
