@@ -22,7 +22,6 @@ steps:
     echo Navigating to android directory
     cd android
     echo Running gradlew.bat clean and assembleRelease
-    gradlew.bat clean
     gradlew.bat assembleRelease
   displayName: 'Build Android Release APK'
 
