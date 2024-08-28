@@ -1,39 +1,39 @@
 trigger:
   branches:
     include:
-      - main  # Or your branch
+      - main  #the branch whose change will trigger the CI pipeline 
 
 pool:
-  name: Default  # Use the self-hosted agent
+  name: Default  # name of the hosting agent
 
 steps:
 - script: |
     echo Starting pre-tasks
-  displayName: 'Run Pre-Tasks'
+  displayName: 'Run Pre-Tasks' #in case of a pre task required like npm test 
 
 - script: |
     echo Deleting package-lock.json
     if exist package-lock.json del package-lock.json
     echo Installing npm dependencies
     npm install
-  displayName: 'Delete package-lock.json and Install Dependencies'
+  displayName: 'Delete package-lock.json and Install Dependencies' #this process is done because package-lock needs to be deleted to install all node modules
 
 - script: |
     echo Navigating to android directory
     cd android
     echo Running gradlew.bat clean and assembleRelease
     gradlew.bat assembleRelease
-  displayName: 'Build Android Release APK'
+  displayName: 'Build Android Release APK' #as the name says just builds the apk as a release product
 
 - task: CopyFiles@2
   inputs:
     contents: 'android/app/build/outputs/apk/release/*.apk'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
-  displayName: 'Copy APK to Staging Directory'
+  displayName: 'Copy APK to Staging Directory' #navigates the build product
 
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: 'drop'
     publishLocation: 'Container'
-  displayName: 'Publish APK as Build Artifact'
+  displayName: 'Publish APK as Build Artifact' #puts the build product into artifact so that it can be downloaded
