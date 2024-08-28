@@ -9,7 +9,6 @@ pool:
 steps:
 - script: |
     echo Starting pre-tasks
-    # Add any pre-tasks here
   displayName: 'Run Pre-Tasks'
 
 - script: |
