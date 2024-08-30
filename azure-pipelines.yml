@@ -6,6 +6,18 @@ pool:
 
 steps:
 - script: |
+    echo Installing Java 11...
+    # Download the JDK installer
+    Invoke-WebRequest -Uri https://download.oracle.com/otn-pub/java/jdk/11.0.16+8/jdk-11.0.16_windows-x64_bin.exe -OutFile jdk-11.0.16_windows-x64_bin.exe
+    # Run the installer silently
+    Start-Process -FilePath .\jdk-11.0.16_windows-x64_bin.exe -ArgumentList '/s' -Wait
+    # Set JAVA_HOME and update PATH
+    [System.Environment]::SetEnvironmentVariable('JAVA_HOME', 'C:\Program Files\Java\jdk-11.0.16', [System.EnvironmentVariableTarget]::Machine)
+    [System.Environment]::SetEnvironmentVariable('PATH', $env:PATH + ';C:\Program Files\Java\jdk-11.0.16\bin', [System.EnvironmentVariableTarget]::Machine)
+    # Verify Java version
+    java -version
+  displayName: 'Install and Configure Java 11'
+- script: |
     echo Starting pre-tasks
   displayName: 'Run Pre-Tasks' #in case of a pre task required like npm test 
 
